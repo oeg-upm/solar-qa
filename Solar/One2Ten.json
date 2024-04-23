@@ -1,0 +1,182 @@
+{
+    "1": {
+        "Catalyst": "Ag\u2013TiO2",
+        "Co-catalyst": "Ag",
+        "Catalyst_set_up": "Powder",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Fixed-bed",
+        "Operation_mode": "Continuous",
+        "Lamp": "Solar Simulator"
+    },
+    "2": {
+        "Catalyst": "TiO2",
+        "Co-catalyst": "Cu, Pd, Pt",
+        "Catalyst_set_up": "Film",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Membrane",
+        "Operation_mode": "Continuous",
+        "Lamp": "LED"
+    },
+    "3": {
+        "Catalyst": "Cu/TiO2",
+        "Co-catalyst": "Cu2O clusters",
+        "Catalyst_set_up": "Film",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Optical Fiber",
+        "Operation_mode": "Continuous",
+        "Lamp": "LED"
+    },
+    "4": {
+        "Catalyst": "TiO2",
+        "Co-catalyst": "Copper (Cu)",
+        "Catalyst_set_up": "Optical Fiber",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Fixed-bed",
+        "Operation_mode": "Continuous",
+        "Lamp": "LED"
+    },
+    "5": {
+        "Catalyst": "Zirconium oxide (ZrO2)",
+        "Co-catalyst": "Carbon dioxide (CO2)",
+        "Catalyst_set_up": "Powder",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Fixed-bed",
+        "Operation_mode": "Continuous",
+        "Lamp": "Mercury"
+    },
+    "6": {
+        "Catalyst": "TiO2",
+        "Co-catalyst": "DPPH",
+        "Catalyst_set_up": "Powder",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Fixed-bed",
+        "Operation_mode": "Continuous",
+        "Lamp": "Solar Simulator"
+    },
+    "7": {
+        "Catalyst": "TiO2 nanotubes",
+        "Co-catalyst": "Pt-metal",
+        "Catalyst_set_up": "Powder(Supported)",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Fixed-bed",
+        "Operation_mode": "Continuous",
+        "Lamp": "Solar Simulator"
+    },
+    "8": {
+        "Catalyst": "CuO-TiO2",
+        "Co-catalyst": "CTAB",
+        "Catalyst_set_up": "Powder",
+        "Reaction_medium": "Liquid",
+        "Reactor_type": "Fixed-bed",
+        "Operation_mode": "Continuous",
+        "Lamp": "Solar Simulator"
+    },
+    "9": {
+        "Catalyst": "TiO2",
+        "Co-catalyst": "ZrO2",
+        "Catalyst_set_up": "Film",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Fixed-bed",
+        "Operation_mode": "Continuous",
+        "Lamp": "Fluorescent"
+    },
+    "10": {
+        "Catalyst": "TiO2",
+        "Co-catalyst": "Cu/TiO2",
+        "Catalyst_set_up": "Film",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "OpticalFiber",
+        "Operation_mode": "Continuous",
+        "Lamp": "LED"
+    },
+    "1_truth": {
+        "Catalyst": "Ag\u2013TiO2",
+        "Co-catalyst": "Ag",
+        "Catalyst_set_up": "Powder",
+        "Reaction_medium": "Liquid",
+        "Reactor_type": "Slurry",
+        "Operation_mode": "Batch",
+        "Lamp": "Mercury"
+    },
+    "2_turth": {
+        "Catalyst": "TiO2",
+        "Co-catalyst": "None",
+        "Catalyst_set_up": "Film",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Membrane",
+        "Operation_mode": "Continuous/Batch",
+        "Lamp": "Fluorescent"
+    },
+    "3_truth": {
+        "Catalyst": "Cu/TiO2",
+        "Co-catalyst": "Cu2O clusters",
+        "Catalyst_set_up": "Film",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Optical Fiber",
+        "Operation_mode": "Continuous",
+        "Lamp": "Mercury"
+    },
+    "4_truth": {
+        "Catalyst": "TiO2",
+        "Co-catalyst": "Copper (Cu)",
+        "Catalyst_set_up": "Optical Fiber",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Fixed-bed",
+        "Operation_mode": "Continuous",
+        "Lamp": "Mercury"
+    },
+    "5_truth": {
+        "Catalyst": "Zirconium oxide (ZrO2)",
+        "Co-catalyst": "None",
+        "Catalyst_set_up": "Powder",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Fixed-bed",
+        "Operation_mode": "Continuous",
+        "Lamp": "Mercury"
+    },
+    "6_truth": {
+        "Catalyst": "TiO2",
+        "Co-catalyst": "None",
+        "Catalyst_set_up": "Powder",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Fixed-bed",
+        "Operation_mode": "Continuous",
+        "Lamp": "Xenon"
+    },
+    "7_truth": {
+        "Catalyst": "TiO2 nanotubes",
+        "Co-catalyst": "Pt-metal",
+        "Catalyst_set_up": "Powder(Supported)",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Fixed-bed",
+        "Operation_mode": "Batch",
+        "Lamp": "Mercury"
+    },
+    "8_truth": {
+        "Catalyst": "CuO-TiO2",
+        "Co-catalyst": "CuO",
+        "Catalyst_set_up": "Powder",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Fixed-bed",
+        "Operation_mode": "Continuous",
+        "Lamp": "Mercury"
+    },
+    "9_truth": {
+        "Catalyst": "TiO2",
+        "Co-catalyst": "ZrO2", 
+        "Catalyst_set_up": "Film",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "Fixed-bed",
+        "Operation_mode": "Continuous",
+        "Lamp": "Fluorescent"
+    }, // this is wrong but strange
+    "10_truth": { 
+        "Catalyst": "TiO2",
+        "Co-catalyst": "Cu/TiO2",
+        "Catalyst_set_up": "Film",
+        "Reaction_medium": "Gas",
+        "Reactor_type": "OpticalFiber",
+        "Operation_mode": "Continuous",
+        "Lamp": "Mercury; SolarSimulator"
+    }, // this is wrong but strange
+}
