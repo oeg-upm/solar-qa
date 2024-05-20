@@ -23,4 +23,19 @@ We have two folders where the python files to run are located:
 
 The PDFs to be processed are located in the `documents` folder.
 
+## Evaluation
+
+### Evaluation Process
+- We adopt the model from Massive Text Embedding Benchmark based on the STS Task to calculate the similarity between each generate term and corresponding term in the ground truth.
+- We apply the similarity to each term pair (ground_truth_term, generation_term)
+- In case of the number of generated terms and ground truth mismatched, we take the minimal number of generation and ground truth as the number of term we evaluate.
+- We set the threshold as 0.85 for correct generation, which 1 indicate correct generation and 0 indicate miss generation
+- Then calculate the overall accuracy for each item.
+
+
+| Rank | Model      | Catalyst | Co-Catalyst | Light Source | Lamp   | Reactor Type | Reaction Medium | Operation Mode |
+|------|------------|----------|-------------|--------------|--------|--------------|-----------------|----------------|
+| 1    | Llama_3_8B | 0.7576   | 0.5758      | 0.6364       | 0.6364 | 0.5455       | 0.4242          | 0.7273         |
+
+
 
