@@ -1,0 +1,7 @@
+{
+    "Light_source": ["UV", "Solar", "UV-Vis", "Monochromatic", "Solar Simulator"],
+    "Lamp" : ["Fluorescent", "Mercury", "Halogen", "Mercury-Xenon", "LED", "Tungsten", "Xenon", "Tungsten-Halide", "Solar Simulator"],
+    "Reactor_type": ["Slurry", "Fixed-bed", "Optical Fiber", "Monolithic", "Membrane", "Fluidised-bed"],
+    "Reaction_medium": ["Liquid", "Gas"],
+    "Operation_mode" : ["Batch", "Continuous", "Batch/Continuous"]
+}
