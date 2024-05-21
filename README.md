@@ -67,6 +67,10 @@ With the tasks to extract experiment-related information from the academic paper
 
     Lamp: XXX
 
+### Run Generation
+
+`Groq.ipynb` contains all the libraries needed as well as the code to run the experiment. The needed data files for run the model and evaluate the model contains in the folder `Solar/ground_truth_data/`.
+
 ## Evaluation
 
 ### Evaluation Process
