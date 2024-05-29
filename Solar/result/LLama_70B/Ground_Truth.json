@@ -1,0 +1,292 @@
+{
+    "1": {
+        "catalyst": "TiO2",
+        "co_catalyst": "Ag",
+        "light_source": "UV",
+        "lamp": "Mercury",
+        "reactor_type": "Slurry",
+        "reaction_medium": "Liquid",
+        "operation_mode": "Batch",
+        "DOI": "10.1016/j.apcatb.2010.02.030"
+    },
+    "2": {
+        "catalyst": "TiO2",
+        "co_catalyst": "None",
+        "light_source": "UV",
+        "lamp": "Fluorescent",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Batch/Continous",
+        "DOI": "10.1016/j.cattod.2009.07.067"
+    },
+    "3": {
+        "catalyst": "TiO2",
+        "co_catalyst": "Cu",
+        "light_source": "UV",
+        "lamp": "Mercury",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Continous",
+        "DOI": "10.1016/j.apcata.2005.08.021"
+    },
+    "4": {
+        "catalyst": "TiO2",
+        "co_catalyst": "Cu",
+        "light_source": "UV",
+        "lamp": "Mercury",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Continous",
+        "DOI": "10.1155/S1110662X05000176"
+    },
+    "5": {
+        "catalyst": "ZrO2",
+        "co_catalyst": "None",
+        "light_source": "UV",
+        "lamp": "Mercury",
+        "reactor_type": "Slurry",
+        "reaction_medium": "Liquid",
+        "operation_mode": "Batch",
+        "DOI": "10.1023/A:1011403320301"
+    },
+    "6": {
+        "catalyst": "TiO2",
+        "co_catalyst": "None",
+        "light_source": "UV",
+        "lamp": "Xenon",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Continous",
+        "DOI": "10.1016/S0360-5442(98)00070-X"
+    },
+    "7": {
+        "catalyst": "TiO2",
+        "co_catalyst": "Pt",
+        "light_source": "UV",
+        "lamp": "Mercury",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Batch",
+        "DOI": "10.1016/j.cattod.2009.07.081"
+    },
+    "8": {
+        "catalyst": "TiO2",
+        "co_catalyst": "CuO",
+        "light_source": "UV",
+        "lamp": "Mercury",
+        "reactor_type": "Slurry",
+        "reaction_medium": "Gas",
+        "operation_mode": "Continous",
+        "DOI": "10.1016/j.jcis.2010.12.034"
+    },
+    "9": {
+        "catalyst": "TiO2",
+        "co_catalyst": "None",
+        "light_source": "UV",
+        "lamp": "Fluorescent",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Continous",
+        "DOI": "10.1016/j.solmat.2007.06.003"
+    },
+    "10": {
+        "catalyst": "TiO2",
+        "co_catalyst": "Cu-Fe-Ag",
+        "light_source": "UV/Solar",
+        "lamp": "Mercury/SolarSimulator",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Continous",
+        "DOI": "10.1007/s10563-009-9065-9"
+    },
+    "11": {
+        "catalyst": "TiO2",
+        "co_catalyst": "None",
+        "light_source": "UV",
+        "lamp": "Xenon",
+        "reactor_type": "Slurry",
+        "reaction_medium": "Liquid",
+        "operation_mode": "Batch",
+        "DOI": "10.1039/B400326H"
+    },
+    "12": {
+        "catalyst": "TiO2",
+        "co_catalyst": "None",
+        "light_source": "Visible",
+        "lamp": "Halogen",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Batch",
+        "DOI": "10.1021/ja910091z"
+    },
+    "13": {
+        "catalyst": "TiO2",
+        "co_catalyst": "None",
+        "light_source": "UV",
+        "lamp": "Fluorescent",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Batch",
+        "DOI": "10.1016/j.carbon.2006.11.028"
+    },
+    "14": {
+        "catalyst": "TiO2",
+        "co_catalyst": "Cu",
+        "light_source": "UV",
+        "lamp": "Mercury",
+        "reactor_type": "Slurry",
+        "reaction_medium": "Liquid",
+        "operation_mode": "Batch",
+        "DOI": "10.1021/ja101318k"
+    },
+    "15": {
+        "catalyst": "Carbon",
+        "co_catalyst": "Au",
+        "light_source": "Visible",
+        "lamp": "None",
+        "reactor_type": "Slurry",
+        "reaction_medium": "Liquid",
+        "operation_mode": "Batch",
+        "DOI": "10.1021/ja200804h"
+    },
+    "16": {
+        "catalyst": "TiO2",
+        "co_catalyst": "None",
+        "light_source": "UV",
+        "lamp": "Mercury",
+        "reactor_type": "Slurry",
+        "reaction_medium": "Liquid",
+        "operation_mode": "Batch",
+        "DOI": "10.1016/j.cattod.2010.08.026"
+    },
+    "17": {
+        "catalyst": "TiO2",
+        "co_catalyst": "Ag-CU",
+        "light_source": "UV",
+        "lamp": "Mercury",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Liquid",
+        "operation_mode": "Continous",
+        "DOI": "10.1007/s11244-007-9022-7"
+    },
+    "18": {
+        "catalyst": "TiO2",
+        "co_catalyst": "None",
+        "light_source": "Visible",
+        "lamp": "Halogen",
+        "reactor_type": "Slurry",
+        "reaction_medium": "Liquid",
+        "operation_mode": "Batch",
+        "DOI": "10.1039/C0EE00780C"
+    },
+    "19": {
+        "catalyst": "TiO2",
+        "co_catalyst": "None",
+        "light_source": "UV",
+        "lamp": "Mercury",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Batch",
+        "DOI": "10.1021/ja108791u"
+    },
+    "20": {
+        "catalyst": "TiO2",
+        "co_catalyst": "Ag",
+        "light_source": "UV/Visible",
+        "lamp": "Mercury",
+        "reactor_type": "Slurry",
+        "reaction_medium": "Liquid",
+        "operation_mode": "Batch",
+        "DOI": "10.1016/S1872-2067(10)60199-4"
+    },
+    "22": {
+        "catalyst": "TiO2",
+        "co_catalyst": "None",
+        "light_source": "Visible",
+        "lamp": "Halogen",
+        "reactor_type": "Slurry",
+        "reaction_medium": "Liquid",
+        "operation_mode": "Batch",
+        "DOI": "10.1016/j.jclepro.2009.02.016"
+    },
+    "23": {
+        "catalyst": "TiO2",
+        "co_catalyst": "CdSe",
+        "light_source": "Visible",
+        "lamp": "Xenon",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Batch",
+        "DOI": "10.1021/jz9000032"
+    },
+    "24": {
+        "catalyst": "TiO2",
+        "co_catalyst": "None",
+        "light_source": "UV",
+        "lamp": "Mercury",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Liquid",
+        "operation_mode": "Batch",
+        "DOI": "10.1016/j.apcatb.2009.01.010"
+    },
+    "25": {
+        "catalyst": "TiO2",
+        "co_catalyst": "Pt",
+        "light_source": "Visible",
+        "lamp": "Fluorescent",
+        "reactor_type": "Slurry",
+        "reaction_medium": "Liquid",
+        "operation_mode": "Batch",
+        "DOI": "10.1007/s11244-006-0100-z"
+    },
+    "26": {
+        "catalyst": "TiO2",
+        "co_catalyst": "Cu",
+        "light_source": "UV",
+        "lamp": "Fluorescent",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Continous",
+        "DOI": "10.1016/j.apcatb.2010.08.015"
+    },
+    "27": {
+        "catalyst": "TiO2",
+        "co_catalyst": "Rh",
+        "light_source": "UV",
+        "lamp": "Mercury",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Batch",
+        "DOI": "10.1016/S1010-6030(99)00113-6"
+    },
+    "28": {
+        "catalyst": "TiO2",
+        "co_catalyst": "None",
+        "light_source": "UV",
+        "lamp": "Mercury",
+        "reactor_type": "Slurry",
+        "reaction_medium": "Liquid",
+        "operation_mode": "Batch",
+        "DOI": "nan"
+    },
+    "29": {
+        "catalyst": "TiO2",
+        "co_catalyst": "Ni-Pt-Ru",
+        "light_source": "UV",
+        "lamp": "Xenon",
+        "reactor_type": "Fixed-bed",
+        "reaction_medium": "Gas",
+        "operation_mode": "Continous",
+        "DOI": "10.2478/v10026-010-0022-1"
+    },
+    "30": {
+        "catalyst": "TiO2",
+        "co_catalyst": "Cu",
+        "light_source": "UV/Solar",
+        "lamp": "Mercury/SolarSimulator",
+        "reactor_type": "OpticalFiber",
+        "reaction_medium": "Gas",
+        "operation_mode": "Batch",
+        "DOI": "10.1016/j.catcom.2008.04.004"
+    }
+}
