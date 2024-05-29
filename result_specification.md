@@ -4,8 +4,8 @@
 
 #### Generation Result
 
-- generated_item: Generation Result by the model
-- ground_truth_item: The anotated result from the paper
+- generated: Generation Result by the model
+- ground_truth: The anotated result from the paper
 - DOI: Reference of the paper
 
 #### Generation Range
@@ -30,24 +30,30 @@ Model URL: https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct
 Result based on LLama-3-70B:
 
 ```
+generation:
+{
     "catalyst": " TiO2",
     "co_catalyst": " Ag",
-    "Light_source": " UV",
-    "Lamp": " Hg",
-    "Reaction_medium": " Liquid",
-    "Reactor_type": " Slurry",
-    "Operation_mode": " Batch",
+    "light_source": " UV",
+    "lamp": " Hg",
+    "reaction_medium": " Liquid",
+    "reactor_type": " Slurry",
+    "operation_mode": " Batch"
+},
+ground_truth:
+{
     "catalyst_ground": "TiO2",
     "co_catalyst_ground": "Ag",
-    "Light_source_ground": "UV",
-    "Lamp_ground": "Mercury",
-    "Reactor_type_ground": "Slurry",
-    "Reaction_medium_ground": "Liquid",
-    "Operation_mode_ground": "Batch",
-    "DOI": "10.1016/j.apcatb.2010.02.030"
+    "light_source_ground": "UV",
+    "lamp_ground": "Mercury",
+    "reactor_type_ground": "Slurry",
+    "reaction_medium_ground": "Liquid",
+    "operation_mode_ground": "Batch"
+},
+"DOI": "10.1016/j.apcatb.2010.02.030"
 ```
 
 
 ## Evaluation
-- The Avgerage accuarcy for each item, calculated according to `Evaluation Process` in `README`
+- The Average accuarcy for each item, calculated according to `Evaluation Process` in `README`
 
