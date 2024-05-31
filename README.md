@@ -73,19 +73,26 @@ With the tasks to extract experiment-related information from the academic paper
 
 ## Evaluation
 
-### Evaluation Process
+### Basic Evaluation Process
 - We adopt the model from [Massive Text Embedding Benchmark](https://huggingface.co/blog/mteb) based on the STS Task to calculate the similarity between each generate term and corresponding term in the ground truth. [Model ID](https://huggingface.co/Salesforce/SFR-Embedding-Mistral)
 - We apply the similarity to each term pair (ground_truth_term, generation_term)
 - In case of the number of generated terms and ground truth mismatched, we take the minimal number of generation and ground truth as the number of term we evaluate.
 - We set the threshold as 0.85 for correct generation, which 1 indicate correct generation and 0 indicate miss generation
 - Then calculate the overall accuracy for each item.
 
+### Rule-based Evaluation Process
+
+- If the ground_truth is in the generation, we consider it is accurate
+- If generated reactor type is `Optical Fiber` or `Packed-bed` or `Membrane` and the ground truth is `Fixed-bed`, we consider it is accurate
+
+
+
 ### Evaluation Leadboard
 
-| Rank |   Model    | Catalyst | Co-Catalyst | Light Source | Lamp   | Reactor Type | Reaction Medium | Operation Mode |
+| Rank |   Model  | Catalyst | Co-Catalyst | Light Source | Lamp   | Reactor Type | Reaction Medium | Operation Mode |
 |------|------------|----------|-------------|--------------|--------|--------------|-----------------|----------------|
 | 1 | Llama_3_70B | 0.8276   | 0.6551      | 0.7931       | 0.5862 | 0.3448       | 0.6207          | 0.7931         |
-| 2 | Llama_3_8B | 0.7576   | 0.5758      | 0.6364       | 0.6364 | 0.5455       | 0.4242          | 0.7272         |       |
+| 2 | Llama_3_8B | 0.7931   | 0.4827      | 0.5172       | 0.5172 | 0.3103       | 0.6552          | 0.7241         |       
 
 
 
