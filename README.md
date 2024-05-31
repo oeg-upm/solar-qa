@@ -89,10 +89,14 @@ With the tasks to extract experiment-related information from the academic paper
 
 ### Evaluation Leadboard
 
-| Rank |   Model  | Catalyst | Co-Catalyst | Light Source | Lamp   | Reactor Type | Reaction Medium | Operation Mode |
-|------|------------|----------|-------------|--------------|--------|--------------|-----------------|----------------|
-| 1 | Llama_3_70B | 0.8276   | 0.6551      | 0.7931       | 0.5862 | 0.3448       | 0.6207          | 0.7931         |
-| 2 | Llama_3_8B | 0.7931   | 0.4827      | 0.5172       | 0.5172 | 0.3103       | 0.6552          | 0.7241         |       
+| Rank |   Model  | Catalyst | Co-Catalyst | Light Source | Lamp   | Reactor Type | Reaction Medium | Operation Mode |  Overall Average |
+|------|------------|----------|-------------|--------------|--------|--------------|-----------------|----------------|----------------|
+| 1 | GPT4 | 0.8621   | 0.4826      | 0.6552       | 0.6552 | 0.4483       | 0.6207          | 0.8621         |  0.6552    |
+| 2 | Llama_3_70B | 0.8276   | 0.6551      | 0.7931       | 0.5862 | 0.3448       | 0.6207          | 0.7931         | 0.6650 |
+| 3 | Llama_3_8B | 0.7931   | 0.4827      | 0.5172       | 0.5172 | 0.3103       | 0.6552          | 0.7241         | 0.5714  |
+| 4 | GPT3.5 | 0.6552   | 0.4138      | 0.7241       | 0.3448 | 0.3448       | 0.5172          | 0.8966         | 0.5567  |    
+
+
 
 
 
