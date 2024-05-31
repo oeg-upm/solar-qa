@@ -4,9 +4,23 @@
 
 #### Generation Result
 
-- generated: Generation Result by the model
-- ground_truth: The anotated result from the paper
-- DOI: Reference of the paper
+The Generation Result is dedicated in the file `Generation.json`. File contains:
+
+- model_id: the reference id for the generative model
+- prompt_template: the template for the prompt for generate the result
+- result:
+
+    - reference_index: paper index given in the dataset
+    - DOI: DOI reference for the paper
+    - generation: generated result
+
+#### Ground Truth
+
+The Ground Truth is dedicated in the file `Ground_Truth.json`. File contains:
+
+- reference_index: paper index given in the dataset
+- DOI: DOI reference for the paper
+- ground_truth: annotated result
 
 #### Generation Range
 The Generation range for each item is given below:
@@ -20,13 +34,6 @@ The Generation range for each item is given below:
 ```
 
 #### Generation Example
-
-Model Info:
-```
-Model ID: meta-llama/Meta-Llama-3-70B-Instruct
-Model URL: https://huggingface.co/meta-llama/Meta-Llama-3-70B-Instruct
-```
-
 Result based on LLama-3-70B:
 
 ```
@@ -39,21 +46,40 @@ generation:
     "reaction_medium": " Liquid",
     "reactor_type": " Slurry",
     "operation_mode": " Batch"
-},
-ground_truth:
-{
-    "catalyst_ground": "TiO2",
-    "co_catalyst_ground": "Ag",
-    "light_source_ground": "UV",
-    "lamp_ground": "Mercury",
-    "reactor_type_ground": "Slurry",
-    "reaction_medium_ground": "Liquid",
-    "operation_mode_ground": "Batch"
-},
-"DOI": "10.1016/j.apcatb.2010.02.030"
+}
 ```
 
 
 ## Evaluation
-- The Average accuarcy for each item, calculated according to `Evaluation Process` in `README`
+The Average accuarcy for each item, calculated according to `Evaluation Process` in `README`.
+The evaluation result is dedicated in `Evaluation.json`. File contains:
+
+- generation_model_id: id reference for the generation model
+- similarity_model_id: id refernce for the similarity model
+- source_ground_truth: path for the file that contains the ground_truth
+- source_generation: path for the file that contains the generation result
+- evaluation_strategy: the evaluation strategy we adopt, detailed in `Evaluation Process` in `README`
+- metric: the evaluation metric
+- result:
+
+    - item: the targeted item
+    - value: evaluation numerical value based on the evalution metric   
+
+
+## Context
+
+The context or chunks that RAG system has selected to provide the context for the generative model.
+The context is dedicated in `Context.json`. File contains:
+
+- similarity_model_id: id refernce for the similarity model
+- similarity_method: the method of calculating similarity
+- context:
+
+    - reference_index: paper index given in the dataset
+    - contexts:
+
+        - item: targeted item
+        - context: a list of all the selected chunks from the original paper
+
+
 
