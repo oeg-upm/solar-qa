@@ -106,7 +106,7 @@ The context is dedicated in `Context.json`. File contains:
 context:
 {
     "similarity_model_id": "Salesforce/SFR-Embedding-Mistral",
-    "similarity_method": "/Solar/result/LLama_3_70B/Ground_Truth.json",
+    "similarity_method": "Cosine_Similarity",
     "context": [
         {"reference_index": "1",
         "context": {
