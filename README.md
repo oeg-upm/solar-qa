@@ -84,20 +84,20 @@ With the tasks to extract experiment-related information from the academic paper
 
 - If the ground_truth is in the generation, we consider it is accurate
 - If generated reactor type is `Optical Fiber` or `Packed-bed` or `Membrane` and the ground truth is `Fixed-bed`, we consider it is accurate
+- Then apply the same evaluation process as `Basic Evaluation Process`
 
 
 
 ### Evaluation Leadboard
 
-| Rank |   Model  | Catalyst | Co-Catalyst | Light Source | Lamp   | Reactor Type | Reaction Medium | Operation Mode | Overall Average |
-|------|----------|----------|-------------|--------------|--------|--------------|-----------------|----------------|-----------------|
+| Rank |   Model  | Catalyst | Co-Catalyst | Light Source | Lamp   | Reactor Type | Reaction Medium | Operation Mode |  Overall Average |
+|------|------------|----------|-------------|--------------|--------|--------------|-----------------|----------------|----------------|
 |1|Claude_3_opus|0.9655|0.6552|0.7241|0.7586|0.5517|0.6897|0.8966|0.7488|
 |2|LLama_3_70B|0.8276|0.6207|0.8276|0.6207|0.3103|0.6207|0.8276|0.665|
 |3|GLM4|0.931|0.4828|0.5517|0.4828|0.5517|0.6897|0.8966|0.6552|
 |4|GPT4|0.8621|0.4828|0.6552|0.6552|0.4483|0.6207|0.8621|0.6552|
 |5|LLama_3_8B|0.7931|0.4828|0.5172|0.5172|0.3103|0.6552|0.7241|0.5714|
-|6|GPT3.5|0.6552|0.4138|0.7241|0.3448|0.3448|0.5172|0.8966|0.5567| 
-
+|6|GPT3.5|0.6552|0.4138|0.7241|0.3448|0.3448|0.5172|0.8966|0.5567|
 
 
 

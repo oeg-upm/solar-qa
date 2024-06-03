@@ -65,6 +65,26 @@ The evaluation result is dedicated in `Evaluation.json`. File contains:
     - item: the targeted item
     - value: evaluation numerical value based on the evalution metric   
 
+#### Evaluation Example
+Result based on LLama-3-70B:
+
+```
+evaluation:
+{
+    "generation_model_id": "meta-llama/Meta-Llama-3-70B-Instruct",
+    "similarity_model_id": "Salesforce/SFR-Embedding-Mistral",
+    "source_ground_truth": "/Solar/result/LLama_3_70B/Ground_Truth.json",
+    "source_generation": "/Solar/result/LLama_3_70B/Generation.json",
+    "evaluation_strategy": "rule-based",
+    "metric": "accuracy",
+    "result": [
+        {"item": "catalyst",
+        "acc": 0.8275862068965517},
+        ...
+        ]
+}
+```
+
 
 ## Context
 
@@ -80,6 +100,23 @@ The context is dedicated in `Context.json`. File contains:
 
         - item: targeted item
         - context: a list of all the selected chunks from the original paper
+
+
+```
+context:
+{
+    "similarity_model_id": "Salesforce/SFR-Embedding-Mistral",
+    "similarity_method": "/Solar/result/LLama_3_70B/Ground_Truth.json",
+    "context": [
+        {"reference_index": "1",
+        "context": {
+            "item": ["Operation_mode"],
+            "chunk": ["XXXXX", "XXXXX"]
+        }},
+        ...
+        ]
+}
+```
 
 
 
