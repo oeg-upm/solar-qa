@@ -1,0 +1,38 @@
+{
+    "generation_model_id": "GPT3.5",
+    "similarity_model_id": "Salesforce/SFR-Embedding-Mistral",
+    "source_ground_truth": "/Solar/result/GPT3.5/Ground_Truth.json",
+    "source_generation": "/Solar/result/GPT3.5/Generation.json",
+    "evaluation_strategy": "rule-based",
+    "metric": "accuracy",
+    "result": [
+        {
+            "item": "catalyst",
+            "acc": 0.6551724137931034
+        },
+        {
+            "item": "co_catalyst",
+            "acc": 0.41379310344827586
+        },
+        {
+            "item": "light_source",
+            "acc": 0.7241379310344828
+        },
+        {
+            "item": "lamp",
+            "acc": 0.3448275862068966
+        },
+        {
+            "item": "reactor_type",
+            "acc": 0.3448275862068966
+        },
+        {
+            "item": "reaction_medium",
+            "acc": 0.5172413793103449
+        },
+        {
+            "item": "operation_mode",
+            "acc": 0.896551724137931
+        }
+    ]
+}

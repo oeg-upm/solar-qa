@@ -1,0 +1,38 @@
+{
+    "generation_model_id": "GLM4",
+    "similarity_model_id": "Salesforce/SFR-Embedding-Mistral",
+    "source_ground_truth": "/Solar/result/GLM4/Ground_Truth.json",
+    "source_generation": "/Solar/result/GLM4/Generation.json",
+    "evaluation_strategy": "rule-based",
+    "metric": "accuracy",
+    "result": [
+        {
+            "item": "catalyst",
+            "acc": 0.9310344827586207
+        },
+        {
+            "item": "co_catalyst",
+            "acc": 0.4827586206896552
+        },
+        {
+            "item": "light_source",
+            "acc": 0.5517241379310345
+        },
+        {
+            "item": "lamp",
+            "acc": 0.4827586206896552
+        },
+        {
+            "item": "reactor_type",
+            "acc": 0.5517241379310345
+        },
+        {
+            "item": "reaction_medium",
+            "acc": 0.6896551724137931
+        },
+        {
+            "item": "operation_mode",
+            "acc": 0.896551724137931
+        }
+    ]
+}

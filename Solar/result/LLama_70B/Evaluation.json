@@ -1,0 +1,38 @@
+{
+    "generation_model_id": "meta-llama/Meta-Llama-3-70B-Instruct",
+    "similarity_model_id": "Salesforce/SFR-Embedding-Mistral",
+    "source_ground_truth": "/Solar/result/LLama_3_70B/Ground_Truth.json",
+    "source_generation": "/Solar/result/LLama_3_70B/Generation.json",
+    "evaluation_strategy": "rule-based",
+    "metric": "accuracy",
+    "result": [
+        {
+            "item": "catalyst",
+            "acc": 0.8275862068965517
+        },
+        {
+            "item": "co_catalyst",
+            "acc": 0.6206896551724138
+        },
+        {
+            "item": "light_source",
+            "acc": 0.8275862068965517
+        },
+        {
+            "item": "lamp",
+            "acc": 0.6206896551724138
+        },
+        {
+            "item": "reactor_type",
+            "acc": 0.3103448275862069
+        },
+        {
+            "item": "reaction_medium",
+            "acc": 0.6206896551724138
+        },
+        {
+            "item": "operation_mode",
+            "acc": 0.8275862068965517
+        }
+    ]
+}

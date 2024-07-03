@@ -1,0 +1,38 @@
+{
+    "generation_model_id": "Claude_3C_opus",
+    "similarity_model_id": "Salesforce/SFR-Embedding-Mistral",
+    "source_ground_truth": "/Solar/result/Claude_3C_opus/Ground_Truth.json",
+    "source_generation": "/Solar/result/Claude_3C_opus/Generation.json",
+    "evaluation_strategy": "rule-based",
+    "metric": "accuracy",
+    "result": [
+        {
+            "item": "catalyst",
+            "acc": 0.9655172413793104
+        },
+        {
+            "item": "co_catalyst",
+            "acc": 0.6551724137931034
+        },
+        {
+            "item": "light_source",
+            "acc": 0.7241379310344828
+        },
+        {
+            "item": "lamp",
+            "acc": 0.7586206896551724
+        },
+        {
+            "item": "reactor_type",
+            "acc": 0.5517241379310345
+        },
+        {
+            "item": "reaction_medium",
+            "acc": 0.6896551724137931
+        },
+        {
+            "item": "operation_mode",
+            "acc": 0.896551724137931
+        }
+    ]
+}
