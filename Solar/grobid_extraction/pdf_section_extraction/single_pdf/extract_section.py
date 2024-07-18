@@ -49,14 +49,23 @@ def extract_sections_from_xml(file_path, output_json_path):
     experimental_content = extract_content_by_keywords(
         ["Experimental", "Experimental studies", "Experiments", "Methods"], "Results and discussion")
     results_discussion_content = extract_content_by_keywords(
-        ["Results and discussion", "Results"], "Conclusion")
+        ["Results and discussion", "Result and discussion", "Results"], "Conclusion")
+    supporting_information_content = extract_content_by_keywords(
+        ["Supporting Information", "Supporting"], "Conclusion")
+    conclusions_content = extract_content_by_keywords(
+        ["Conclusion", "Conclusions"], "Conclusion")
     # specific_id_content = extract_by_xml_id("_ZT2rFX7")
 
     sections = [
         {"title": "Abstract", "content": abstract_content},
         {"title": "Experimental", "content": experimental_content},
-        {"title": "Results and discussion", "content": results_discussion_content}
+        {"title": "Results and discussion", "content": results_discussion_content},
+        {"title": "Conclusions", "content": conclusions_content},
     ]
+
+    if supporting_information_content:
+        sections.append({"title": "Supporting Information",
+                        "content": supporting_information_content})
 
     json_data = json.dumps(sections, indent=2)
 
@@ -66,8 +75,8 @@ def extract_sections_from_xml(file_path, output_json_path):
     return f"JSON guardado correctamente en {output_json_path}"
 
 
-# Path configuration for the input and output file
-xml_file_path = '../xml_results/paper_14.xml'
-output_json_path = '../json_results/paper14_extraction.json'
+# Example usage
+xml_file_path = '../xml_results/papers1/paper_16238777645e67b6116072c5.89519248.xml'
+output_json_path = '../json_results/papers1/paper_.json'
 resultado = extract_sections_from_xml(xml_file_path, output_json_path)
 print(resultado)
