@@ -7,7 +7,7 @@ import os
 client = GrobidClient(config_path="../settings/config.json")
 
 service_name = "processFulltextDocument"
-pdf_file = "../documents/paper_1.pdf"
+pdf_file = "../documents/papers1/paper_15721500205e95c1bb016594.80962303.pdf"
 
 
 def process_fulltext_document(service, file):
@@ -42,20 +42,11 @@ if xml_response:
         os.makedirs(output_folder_xml)
 
     # Save XML file
-    output_path_xml = os.path.join(output_folder_xml, "paper_1.2.xml")
+    output_path_xml = os.path.join(output_folder_xml, "paper_15721500205e95c1bb016594.80962303.xml")
     with open(output_path_xml, "w") as xml_file:
         xml_file.write(xml_response)
     print(f"XML file saved in {output_path_xml}")
 
-    # Crear la carpeta si no existe
-    """ output_folder = "../json_results"
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder) """
-
-    # Guardar JSON en un archivo
-    """  output_path = os.path.join(output_folder, "paper_11.json")
-    with open(output_path, "w") as json_file:
-        json_file.write(json_data) """
 
     # print(f"JSON file saved in {output_path}")
 else:
