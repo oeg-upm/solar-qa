@@ -7,7 +7,7 @@ from os import path, makedirs, listdir
 client = GrobidClient(config_path="../settings/config.json")
 
 service_name = "processFulltextDocument"
-pdf_folder = "../documents"
+pdf_folder = "../documents/"
 
 
 def process_fulltext_document(service, file):
@@ -41,7 +41,7 @@ def process_all_pdfs(pdf_folder):
                 json_data = json.dumps(dict_data, indent=4)
 
                 # Output folders for XML and JSON
-                xml_output_folder = "../xml_results"
+                xml_output_folder = "../xml_results/"
                 # json_output_folder = "../json_results"
 
                 if not path.exists(xml_output_folder):
