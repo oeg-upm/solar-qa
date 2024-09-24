@@ -8,8 +8,10 @@
 # !pip install --upgrade langchain-community
 # !pip install --upgrade langchain-core
 # !pip install --upgrade langsmith
+# !pip install ctransformers[cuda]
 # !pip install huggingface-hub
 # !pip install --upgrade sqlalchemy
+# !pip install rdflib
 # !pip install llama-cpp-python
 # !pip install typing-extensions==4.7.1 --upgrade
 # !pip install pypdf2
@@ -199,9 +201,9 @@ class SolarQA:
 def get_parser():
     parser = argparse.ArgumentParser(description="Demo of LLM Pipeline")
     parser.add_argument('--use_platform', type=lambda x:str2bool(x), default=True, help="the parameter of whether use online llm platform or use local model")
-    parser.add_argument('--user_key', help="if use platform, enter your key for platform", type=str)
+    parser.add_argument('--user_key', default="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", help="if use platform, enter your key for platform", type=str)
     parser.add_argument('--llm_id', default="llama-3.1-70b-versatile", help="the reference for the selected model, support grog model, huggingface llm or local model path ", type=str)
-    parser.add_argument('--hf_key', help="your huggingface token", type=str)
+    parser.add_argument('--hf_key', default="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", help="your huggingface token", type=str)
     parser.add_argument('--llm_platform', default="groq", help='your platform choice', choices=["groq"], type=str)
     parser.add_argument('--sim_model_id', default='Salesforce/SFR-Embedding-Mistral', help="encoder model for RAG", type=str)
     parser.add_argument('--json_path', help='input data, extracted context from pdf', type=str)
@@ -213,17 +215,18 @@ if __name__ == '__main__':
     parser = get_parser()
     args = parser.parse_args()
     args_dict = vars(args)
+    # print(args_dict)
+    # args_dict["json_path"] = "D:\\Projects\\Solar\\data\\paper1_extraction.json"
     prompt_file = args_dict["prompt_file"]
+    # args_dict["context_file_path"] = "D:\\Projects\\Solar\\result\\context.json"
     del args_dict["prompt_file"]
     start_time = time.time()
     solar = SolarQA(**args_dict)
-    print("--- %s model loading: seconds ---" % time.time())
-    print("--- %s time consumption: seconds ---" % (time.time() - start_time))
+    print("--- %s Model Loading time consumption: seconds ---" % (time.time() - start_time))
     temp_time = time.time()
     with open(prompt_file, "rb") as f:
         query_data = json.load(f)
     solar.generation(query_data=query_data)
     print(solar.result)
-    print("--- %s model generation: seconds ---" % time.time())
-    print("--- %s time consumption: seconds ---" % (time.time() - temp_time))
-    # solar.save_context()
+    print("--- %s Model generation time consumption: seconds ---" % (time.time() - temp_time))
+    solar.save_context()
