@@ -8,10 +8,8 @@
 # !pip install --upgrade langchain-community
 # !pip install --upgrade langchain-core
 # !pip install --upgrade langsmith
-# !pip install ctransformers[cuda]
 # !pip install huggingface-hub
 # !pip install --upgrade sqlalchemy
-# !pip install rdflib
 # !pip install llama-cpp-python
 # !pip install typing-extensions==4.7.1 --upgrade
 # !pip install pypdf2
