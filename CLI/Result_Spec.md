@@ -32,12 +32,32 @@ This item contains the calculation metric used in the RAG searching stage
 
 ### Result
 This item contains all relevant generation results, which includes:
-- **question_category**: This item refers to what the result is about, possible choice: [catalyst/co_catalyst, light_source/lamp, reaction_medium, reactor_type, operation_mode]
+<!-- - **question_category**: This item refers to what the result is about, possible choice: [catalyst/co_catalyst, light_source/lamp, reaction_medium, reactor_type, operation_mode]
 - **query**: This item contains the prompt used for the llm generation
 - **generation**: This item contains the generation result from the llm model
-- **evidence**: this item contains the evidence to support the RAG algorithm, which contains **pdf_refercence** and **similiarity_score**
+- **evidence**: This item contains the evidence to support the RAG algorithm, which contains **pdf_refercence** and **similiarity_score**
     * **pdf_reference**: This item contains the original text extracted by the similarity model
-    * **similiarity_score**: This item contains the similarity score that are calcuated between quesry embedding and pdf_reference embedding, the calculation metric is the similarity metric.
+    * **similiarity_score**: This item contains the similarity score that are calcuated between quesry embedding and pdf_reference embedding, the calculation metric is the similarity metric. -->
+
+| Property | Excepected Value | Definition |
+| :----- | :---- | :---- |
+| **question_category** | String   | This item refers to what the query is about, five possible choices are given below |
+| **query** | String | This item contains the prompt used for the llm generation |
+| **generation** | Dictionary | This item contains the generation result from the llm model |
+| **evidence** | Dictionary | This item contains the evidence to support the RAG algorithm, which contains **pdf_refercence** and **similiarity_score** |
+| **pdf_reference** | String | This item contains the original text extracted by the similarity model |
+| **similiarity_score** | Float | This item contains the similarity score that are calcuated between quesry embedding and pdf_reference embedding, the calculation metric is the similarity metric. |
+
+*Choices for question_category and expected value:*
+
+| Category | Definition | Excepected Value |
+| :----- | :---- | :---- |
+| **catalyst/co_catalyst** | The query is about the catalyst condition  | Unknow |
+| **light_source/lamp** | The query is about the light usage condition about the experiment | **light_source**: 'UV', 'Solar', 'UV-Vis', 'Monochromatic', 'Solar Simulator'<br>**lamp**: 'Fluorescent', 'Mercury', 'Halogen', 'Mercury-Xenon', 'LED', 'Tungsten', 'Xenon', 'Tungsten-Halide', 'Solar Simulator' |
+| **reaction_medium** | The query is about the reaction medium used in the experiment | 'Liquid', 'Gas' |
+| **reactor_type** | The query is about the type of the reactor used in the experiment | 'Slurry', 'Fixed-bed', 'Optical Fiber', 'Monolithic', 'Membrane', 'Fluidised-bed' |
+| **operation_mode** | The query is about how the operation is conducted | 'Batch', 'Continuous', 'Batch/Continuous' |
+
 
 *Example:*
 ```json
