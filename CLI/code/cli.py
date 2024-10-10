@@ -20,23 +20,39 @@
 # !pip install faiss-cpu
 # !pip install bitsandbytes accelerate
 
-import warnings
-warnings.filterwarnings("ignore")
+import subprocess
+from multiprocessing import Pool, Process
+import time
 
+
+background_process = Process(target=subprocess.Popen, args=(["bash", "run_grobid.sh"],))
+background_process.start()
+print(background_process.is_alive())
+time.sleep(15)
+
+# client = GrobidClient(config_path="./setting/config.json")
+
+
+
+from grobid_client.grobid_client import GrobidClient
 import os
 import json
 import argparse
-import time
+
 import torch
 import transformers
 from huggingface_hub import login
 from langchain_groq import ChatGroq
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
+from process import *
 
+
+
+# client = GrobidClient(config_path="./setting/config.json")
 
 def get_context(context):
     res = []
@@ -56,10 +72,11 @@ def clean_gen(gen):
     return res
 
 def str2bool(v):
-  return v.lower() in ("yes", "true", "t", "1")
+    return v.lower() in ("yes", "true", "t", "1")
 
 class SolarQA:
-    def __init__(self, use_platform, user_key, llm_id, hf_key, llm_platform="LOCAL", temperature=0.1, sim_model_id="Salesforce/SFR-Embedding-Mistral", json_path="", context_file_path=""):
+    def __init__(self, use_platform, user_key, llm_id, hf_key, llm_platform="LOCAL", temperature=0.1, sim_model_id="Salesforce/SFR-Embedding-Mistral", input_file_path=str(), context_file_path=""):
+        # print(input_file_path)
         self.use_platform = use_platform
         self.llm_id = llm_id
         self.user_key = user_key
@@ -67,30 +84,37 @@ class SolarQA:
         self.llm_platform = llm_platform.lower()
         self.temperature = temperature
         self.sim_model_id = sim_model_id
-        self.sys_prompt_platform = """
-        You are an assistant for extract information from context and selection the possible answer from the selection provided.
-        You are given the extracted parts of a paper about solar chemistry and a question. Provide the extracted information and nothing else.
-        Context: {context}
-        Question: {question}
-        """
         self.sys_prompt = """
         You are an assistant for extract information from context and selection the possible answer from the selection provided.
         You are given the extracted parts of a paper about solar chemistry and a question. Provide the extracted information and nothing else.
         """
         self.context_file_path = context_file_path
-        self.rag_prompt = PromptTemplate(template=self.sys_prompt_platform, input_variables=['Context', 'Question'])
-        self.json_path = json_path
-        self.context_result = {}
+        # self.data = data
+        self.input_file_path = input_file_path
+        
+        self.context_result = {
+            "generation_model": self.llm_id,
+            "similarity_model": self.sim_model_id,
+            "similarity_metric": "Cosine_Similarity",
+            "result": []
+        }
         login(self.hf_key)
         self.get_text()
         self.get_vector()
-        print("Vector Store Database is prepared")
+        print("¡¡¡Vector Store Database is prepared!!!")
         self.get_llm()
 
     def get_text(self):
         title_list = ["Abstract", "Experimental", "Results and discussion"]
-        with open(self.json_path, "rb") as f:
-            data = json.load(f)
+        # with open(self.json_path, "rb") as f:
+        #     data = json.load(f)
+        # print(self.input_file_path)
+        if self.input_file_path[-3:] == "pdf":
+            data = process_paper(self.input_file_path)
+        else:
+            with open(self.input_file_path, "rb") as f:
+                data = json.load(f)
+        # print("¡¡¡PDF file has been extracted!!!")
         self.context = ""
         for section in data:
             if section["title"] in title_list:
@@ -135,7 +159,7 @@ class SolarQA:
             length_function=len
         )
         chunks = text_splitter.split_text(text=self.context)
-        self.vector_store = FAISS.from_texts(chunks, embedding=self.sim_model)
+        self.vector_store = FAISS.from_texts(chunks, embedding=self.sim_model, normalize_L2=True, distance_strategy="COSINE")
 
     def search(self, query, k):
         embed_q = self.sim_model.embed_query(query)
@@ -154,17 +178,23 @@ class SolarQA:
     def generation(self, query_data):
         res = ""
         if self.use_platform:
-            retriever = self.vector_store.as_retriever(search_kwargs={'k': 5})
-            qa = RetrievalQA.from_chain_type(llm=self.llm,
-                                                 chain_type="stuff",
-                                                 retriever=retriever,
-                                                 return_source_documents=True,
-                                                 chain_type_kwargs={"prompt": self.rag_prompt})
             for key, query in query_data.items():
-                response = qa.invoke({"query": query})
-                self.context_result[key] = get_context(response["source_documents"])
-                res += response["result"]
-                print(response["result"])
+                new_prompt = self.format_prompt(query, 5)
+                messages = [{"role": "system", "content": self.sys_prompt}, {"role": "user", "content": new_prompt}]
+                outputs = self.llm.invoke(messages)
+                response = outputs.content
+                temp_res = {
+                    "question_category": key,
+                    "query": query,
+                    "generation": clean_gen(response),
+                    "evidence": []
+                }
+                for i in range(len(self.context)):
+                    context = self.context[i][0].page_content
+                    sim_score = float(self.context[i][1])
+                    temp_res["evidence"].append({"pdf_reference": context, "similarity_score": sim_score})
+                self.context_result["result"].append(temp_res)
+                res += response
                 res += "\n"
             self.result = clean_gen(res)
         else:
@@ -184,14 +214,24 @@ class SolarQA:
                     temperature=self.temperature,
                     top_p=0.9,
                 )
-                self.context_result[key] = self.context
-                response = outputs[0][input_ids.shape[-1]:]
-                res += self.tokenizer.decode(response, skip_special_tokens=True)
+                response = self.tokenizer.decode(outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)
+                temp_res = {
+                    "question_category": key,
+                    "query": query,
+                    "generation": clean_gen(response),
+                    "evidence": []
+                }
+                for i in range(len(self.context)):
+                    context = self.context[i][0].page_content
+                    sim_score = float(self.context[i][1])
+                    temp_res["evidence"].append({"pdf_reference": context, "similarity_score": sim_score})
+                self.context_result["result"].append(temp_res)
+                res += response
                 res += "\n"
             self.result = clean_gen(res)
-        # print(self.result)
 
     def save_context(self):
+        # print(self.context_result)
         with open(self.context_file_path, "w") as f:
             json.dump(self.context_result, f)
         print(f"RAG context is saved at: {self.context_file_path}")
@@ -206,27 +246,33 @@ def get_parser():
     parser.add_argument('--hf_key', default="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", help="your huggingface token", type=str)
     parser.add_argument('--llm_platform', default="groq", help='your platform choice', choices=["groq"], type=str)
     parser.add_argument('--sim_model_id', default='Salesforce/SFR-Embedding-Mistral', help="encoder model for RAG", type=str)
-    parser.add_argument('--json_path', help='input data, extracted context from pdf', type=str)
-    parser.add_argument('--prompt_file', help='queries', type=str)
+    parser.add_argument('--input_file_path', help='input data, extracted context from pdf', type=str)
+    parser.add_argument('--prompt_file_pdf', help='queries', type=str)
     parser.add_argument('--context_file_path', help='save context file', type=str)
     return parser
 
-if __name__ == '__main__':
+def main():
     parser = get_parser()
     args = parser.parse_args()
     args_dict = vars(args)
-    # print(args_dict)
-    # args_dict["json_path"] = "D:\\Projects\\Solar\\data\\paper1_extraction.json"
-    prompt_file = args_dict["prompt_file"]
-    # args_dict["context_file_path"] = "D:\\Projects\\Solar\\result\\context.json"
-    del args_dict["prompt_file"]
+    prompt_file_pdf = args_dict["prompt_file_pdf"]
+    del args_dict["prompt_file_pdf"]
     start_time = time.time()
     solar = SolarQA(**args_dict)
-    print("--- %s Model Loading time consumption: seconds ---" % (time.time() - start_time))
+    print("--- %s Data Preparation and Model Loading time consumption: seconds ---" % (time.time() - start_time))
     temp_time = time.time()
-    with open(prompt_file, "rb") as f:
+    with open(prompt_file_pdf, "rb") as f:
         query_data = json.load(f)
     solar.generation(query_data=query_data)
     print(solar.result)
     print("--- %s Model generation time consumption: seconds ---" % (time.time() - temp_time))
     solar.save_context()
+
+
+print("start")
+main_process = Process(target=main)
+main_process.start()
+if main_process.is_alive():
+    print("main process is finished")
+else:
+    background_process.kill()
