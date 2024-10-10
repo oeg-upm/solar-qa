@@ -1,41 +1,6 @@
-# File       : pipeline.py
-# Time       ：2024/7/14 14:11
-# Author     ：ClarkWang
-# Contact    ：wzyyyyyy0519@gmail
-# Description：
-
-# !pip install --upgrade langchain langchain_groq
-# !pip install --upgrade langchain-community
-# !pip install --upgrade langchain-core
-# !pip install --upgrade langsmith
-# !pip install ctransformers[cuda]
-# !pip install huggingface-hub
-# !pip install --upgrade sqlalchemy
-# !pip install rdflib
-# !pip install llama-cpp-python
-# !pip install typing-extensions==4.7.1 --upgrade
-# !pip install pypdf2
-# !pip install sentence-transformers==2.7.0
-# !pip install --upgrade transformers
-# !pip install faiss-cpu
-# !pip install bitsandbytes accelerate
-
-import subprocess
-from multiprocessing import Pool, Process
-import time
-
-
-background_process = Process(target=subprocess.Popen, args=(["bash", "run_grobid.sh"],))
-background_process.start()
-print(background_process.is_alive())
-time.sleep(15)
-
-# client = GrobidClient(config_path="./setting/config.json")
-
-
-
-from grobid_client.grobid_client import GrobidClient
 import os
+import time
+from grobid_client.grobid_client import GrobidClient
 import json
 import argparse
 
@@ -50,9 +15,6 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from process import *
 
-
-
-# client = GrobidClient(config_path="./setting/config.json")
 
 def get_context(context):
     res = []
@@ -237,42 +199,49 @@ class SolarQA:
         print(f"RAG context is saved at: {self.context_file_path}")
 
 
+def run_bench(input_folder, output_folder):
+    dir_list = os.listdir(input_folder)
+    for i in range(len(dir_list)):
+        args_dict = {
+            "use_platform": str2bool("False"),
+            "user_key": "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",
+            "llm_id": "meta-llama/Llama-3.2-3B-Instruct",
+            "hf_key": "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",
+            "llm_platform": "groq",
+            "sim_model_id": "Salesforce/SFR-Embedding-Mistral",
+            "input_file_path": "",
+            "prompt_file_pdf": "/home/jovyan/Solar/CLI/data/prompts.json",
+            "context_file_path": ""
+        }
+        input_dir = input_folder + f"paper_{i+1}.json"
+        output_dir = output_folder + f"result_{i+1}.json"
+        # result_list = os.listdir(output_folder)
+        if os.path.exists(input_dir):
+            if os.path.exists(output_dir):
+                pass
+            else:
+                args_dict["input_file_path"] = input_dir
+                args_dict["context_file_path"] = output_dir
+                print(args_dict)
+                prompt_file_pdf = args_dict["prompt_file_pdf"]
+                del args_dict["prompt_file_pdf"]
+                start_time = time.time()
+                solar = SolarQA(**args_dict)
+                print("--- %s Data Preparation and Model Loading time consumption: seconds ---" % (time.time() - start_time))
+                temp_time = time.time()
+                with open(prompt_file_pdf, "rb") as f:
+                    query_data = json.load(f)
+                solar.generation(query_data=query_data)
+                print(solar.result)
+                print("--- %s Model generation time consumption: seconds ---" % (time.time() - temp_time))
+                solar.save_context()
 
-def get_parser():
-    parser = argparse.ArgumentParser(description="Demo of LLM Pipeline")
-    parser.add_argument('--use_platform', type=lambda x:str2bool(x), default=True, help="the parameter of whether use online llm platform or use local model")
-    parser.add_argument('--user_key', default="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", help="if use platform, enter your key for platform", type=str)
-    parser.add_argument('--llm_id', default="llama-3.1-70b-versatile", help="the reference for the selected model, support grog model, huggingface llm or local model path ", type=str)
-    parser.add_argument('--hf_key', default="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", help="your huggingface token", type=str)
-    parser.add_argument('--llm_platform', default="groq", help='your platform choice', choices=["groq"], type=str)
-    parser.add_argument('--sim_model_id', default='Salesforce/SFR-Embedding-Mistral', help="encoder model for RAG", type=str)
-    parser.add_argument('--input_file_path', help='input data, extracted context from pdf', type=str)
-    parser.add_argument('--prompt_file_pdf', help='queries', type=str)
-    parser.add_argument('--context_file_path', help='save context file', type=str)
-    return parser
 
-def main():
-    parser = get_parser()
-    args = parser.parse_args()
-    args_dict = vars(args)
-    prompt_file_pdf = args_dict["prompt_file_pdf"]
-    del args_dict["prompt_file_pdf"]
-    start_time = time.time()
-    solar = SolarQA(**args_dict)
-    print("--- %s Data Preparation and Model Loading time consumption: seconds ---" % (time.time() - start_time))
-    temp_time = time.time()
-    with open(prompt_file_pdf, "rb") as f:
-        query_data = json.load(f)
-    solar.generation(query_data=query_data)
-    print(solar.result)
-    print("--- %s Model generation time consumption: seconds ---" % (time.time() - temp_time))
-    solar.save_context()
+            
 
-
-print("start")
-main_process = Process(target=main)
-main_process.start()
-if main_process.is_alive():
-    print("main process is finished")
-else:
-    background_process.kill()
+input_folder = "/home/jovyan/Solar/data/paper_all/"
+output_folder = "/home/jovyan/Solar/CLI/context/"
+run_bench(input_folder, output_folder)
+        
+        
+        

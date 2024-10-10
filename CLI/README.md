@@ -37,7 +37,7 @@ This repository contains the command-line tool for [solar-qa pipepine](https://g
 "--hf_key": your huggingface token, this is required to use the similarity model, type="str"
 "--llm_platform": indication of which llm online platform you wish to use, option=["grob"]
 "--sim_model_id": the reference id for the similarity model, type="str"
-"--pdf_file_path": the directory for the pdf fild that you wish to analysis, type="str", file type=.pdf
+"--input_file_path": the directory for the pdf fild that you wish to analysis, type="str", file type=.pdf
 "--prompt_file_path": the directory for the json file that contains your prompt, file type=.json
 "--context_file_path": the directory for where you wish to save the output file, file type=.json
 ```
