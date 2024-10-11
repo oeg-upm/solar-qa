@@ -80,12 +80,12 @@ The choices for **individual category** and **expected value** are given below, 
 }
 "evidence": [
     {
-        "pdf reference": "of TiO 2 photocatalyst.The in situ IR experiments are still in progress to investigate the mechanism aspects of the catalyst.",
-        "similarity score": 0.4707722067832947
+        "pdf_reference": "of TiO 2 photocatalyst.The in situ IR experiments are still in progress to investigate the mechanism aspects of the catalyst.",
+        "similarity_score": 0.4707722067832947
     },
     {
-        "pdf reference": "other hydrocarbons might have been generated, but in small quantities which is too low to be detected.Photocatalytic activity is presented by a product yield, e.g., lmol/(g catal.), and quantum efficiency (U Q ) that can be evaluated with Eq. ( 1) below 1.This calculation is based on methanol yield at 6 h of the reaction. The results of quantum efficiency calculation are displayed in Table 2.The formation of methanol was found to be much more effective on Cu 2 loaded TiO 2 catalyst.The highest methanol",
-        "similarity score": 0.49091827869415283
+        "pdf_reference": "other hydrocarbons might have been generated, but in small quantities which is too low to be detected.Photocatalytic activity is presented by a product yield, e.g., lmol/(g catal.), and quantum efficiency (U Q ) that can be evaluated with Eq. ( 1) below 1.This calculation is based on methanol yield at 6 h of the reaction. The results of quantum efficiency calculation are displayed in Table 2.The formation of methanol was found to be much more effective on Cu 2 loaded TiO 2 catalyst.The highest methanol",
+        "similarity_score": 0.49091827869415283
     },
     ...
 ]
