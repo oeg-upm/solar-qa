@@ -1,0 +1,7 @@
+{
+    "catalyst/co_catalyst": "What is the chemical name for the catalyst and co_catalyst from the knowledge graph that about an solar chemical experiment?",
+    "light_source/lamp": "Which category of light source and lamp is used from the knowledge graph about a solar chemical experiment? The category is given below: \nLight_source: ['UV', 'Solar', 'UV-Vis', 'Monochromatic', 'Solar Simulator']\nLamp: ['Fluorescent', 'Mercury', 'Halogen', 'Mercury-Xenon', 'LED', 'Tungsten', 'Xenon', 'Tungsten-Halide', 'Solar Simulator']",
+    "reaction_medium": "Which category of reaction_medium is used from the knowledge graph about a solar chemical experiment? The category is given below: \nReaction_medium: ['Liquid', 'Gas']",
+    "reactor_type": "Which category of reactor_type is used from the knowledge graph about a solar chemical experiment? The category is given below: \nReactor_type: ['Slurry', 'Fixed-bed', 'Optical Fiber', 'Monolithic', 'Membrane', 'Fluidised-bed']",
+    "operation_mode": "Which category of operation_modeis used from the knowledge graph about a solar chemical experiment? The category is given below: \nOperation_mode: ['Batch', 'Continuous', 'Batch/Continuous']"
+}
