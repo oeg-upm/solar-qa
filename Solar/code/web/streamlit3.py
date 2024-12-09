@@ -1,3 +1,5 @@
+# Version Json CLI
+
 import streamlit as st
 import tempfile
 import json
@@ -7,110 +9,137 @@ import time
 import requests
 import fitz
 import io
-
-def str2bool(v):
-    return v.lower() in ("yes", "true", "t", "1")
+import pandas as pd
 
 # Función para inicializar claves en st.session_state
-def initialize_votes_state(analysis_idx, paragraph_idx):
-    # Crear claves únicas para "Me gusta" y "No me gusta"
-    key_upvote = f"votes_up_{analysis_idx}_{paragraph_idx}"
-    key_downvote = f"votes_down_{analysis_idx}_{paragraph_idx}"
+def initialize_votes_state(analysis_idx, paragraph_idx, voter_name):
+    key_upvote = f"{voter_name}_votes_up_{analysis_idx}_{paragraph_idx}"
+    key_downvote = f"{voter_name}_votes_down_{analysis_idx}_{paragraph_idx}"
 
-    # Inicializar claves en st.session_state si no existen
     if key_upvote not in st.session_state:
-        st.session_state[key_upvote] = 0
+        st.session_state[key_upvote] = False  # Cambiar a booleano para "Positive"
     if key_downvote not in st.session_state:
-        st.session_state[key_downvote] = 0
+        st.session_state[key_downvote] = False  # Cambiar a booleano para "Negative"
 
-    # Retornar las claves para uso posterior
     return key_upvote, key_downvote
 
+# Transformar JSON
+def transform_json(input_json):
+    transformed_data = {
+        "paper_title": input_json.get("paper_title", "Not available"),
+        "DOI": input_json.get("DOI", "Not available"),
+        "analysis": input_json.get("result", [])
+    }
+    return transformed_data
 
-# Función para la página "JSON"
+# Página principal
 def json_page():
-
-    # Agregar espacio
     st.markdown("<div style='height: 50px;'></div>", unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 13, 1])
     with col2:
         st.image("/Users/alexandrafaje/Desktop/Solar/solar_chem/logo_pg.png", width=600)
 
-    # Agregar espacio
-    st.markdown("<div style='height: 80px;'></div>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>JSON INFORMATION</h2>", unsafe_allow_html=True)
 
-    #st.markdown("<h2 style='text-align: center;'>JSON</h2>", unsafe_allow_html=True)
+    uploaded_json = st.file_uploader("Upload JSON file", type="json")
 
-    # Nuevo código para subir un archivo JSON desde la interfaz
-    uploaded_json = st.file_uploader("Sube un archivo JSON", type="json")
-
-    # Paso 2: Leer y mostrar el contenido del JSON con formato
     if uploaded_json is not None:
         try:
-            # Cargar el contenido del archivo JSON
             json_content = json.load(uploaded_json)
+            transformed_json = transform_json(json_content)
 
-            with st.expander("Información del Paper"):
-                paper_id = json_content.get("paper_id", "No disponible")
-                paper_title = json_content.get("paper_title", "No disponible")
-                st.markdown(f"""
-                    <h4 style='color:#333;'>ID:</h4>
-                    <p style='font-size:16px; color:#555;'>{paper_id}</p>
-                    <h4 style='color:#333;'>TÍTULO:</h4>
-                    <p style='font-size:16px; color:#555;'>{paper_title}</p>
-                    """, unsafe_allow_html=True)
+            # Solicitar nombre del usuario
+            st.markdown("### Please enter your name to continue:")
+            voter_name = st.text_input("Enter your name:")
 
-            # Expander para cada análisis dentro de la lista
-            if "analysis" in json_content:
-                st.subheader("Análisis")
-                ##for analysis in json_content["analysis"]:
-                for analysis_idx, analysis in enumerate(json_content["analysis"]):
-                    # Acceder a los valores de `generation` y construir un título estilizado
-                    generation = analysis.get("generation", {})
-                    title_parts = [
-                        f"<strong style='color:#333;'>{key.capitalize()}</strong>: <span style='font-size:14px; color:#555;'>Tipo</span> "
-                        f"<span style='font-size:16px; color:#1E90FF;'>{value}</span>"  # Valor en color azul
-                        for key, value in generation.items()
-                    ]
-                    expander_title = " | ".join(title_parts)  # Usa "|" para separar cada parte del título
+            if voter_name:
+                st.success(f"Welcome, {voter_name}! You can now cast your votes.")
 
-                    # Mostrar el título antes del `expander`
-                    st.markdown(f"<div style='font-size:17px; color:#111;'><strong>{expander_title}</strong></div>", unsafe_allow_html=True)
+                # Información general del documento
+                with st.expander("Paper Information"):
+                    st.markdown(f"""
+                        <h4 style='color:#333;'>TITLE:</h4>
+                        <p style='font-size:16px; color:#555;'>{transformed_json['paper_title']}</p>
+                        <h4 style='color:#333;'>DOI:</h4>
+                        <p style='font-size:16px; color:#555;'>{transformed_json['DOI']}</p>
+                        """, unsafe_allow_html=True)
 
-                    # Expander con el título estilizado
-                    with st.expander("View details"):
-                    # Mostrar información de `reference_paragraphs` de manera estructurada
-                        if "reference_paragraphs" in analysis:
-                            for paragraph_idx, paragraph in enumerate(analysis["reference_paragraphs"]):
-                            ##for idx, paragraph in enumerate(analysis["reference_paragraphs"]):
-                                pdf_reference = paragraph.get("pdf_reference", "No disponible")
-                                #similarity_score = paragraph.get("similarity_score", "No disponible")
-                                
-                                key_upvote, key_downvote = initialize_votes_state(analysis_idx, paragraph_idx)
+                if "analysis" in transformed_json:
+                    st.subheader("Analysis")
+                    votes_data = []
 
-                                # Formato visual para cada párrafo
-                                st.markdown(f"**Párrafo {paragraph_idx + 1}**")
-                                #st.markdown(f"- **Puntuación de Similitud:** `{similarity_score}`")
-                                st.markdown(f"- **Referencia del PDF:** {pdf_reference}")
-        
-                                #col1, col2 = st.columns([1, 4])
-                                col1, col2, col3, col4, col5, col6, col7, col8, col9, col10 = st.columns([1, 1, 1, 1, 2, 2, 1, 1, 1, 1])
-                                with col5:
-                                    if st.button("👍", key="button_up_" + str(analysis_idx) + "_" + str(paragraph_idx)):
-                                        st.session_state[key_upvote] += 1
-                                with col6:
-                                    if st.button("👎", key="button_down_" + str(analysis_idx) + "_" + str(paragraph_idx)):
-                                        st.session_state[key_downvote] += 1
-                                st.markdown(f"- Like: {st.session_state[key_upvote]}")
-                                st.markdown(f"- Dislike: {st.session_state[key_downvote]}")
-                                # Línea divisoria entre párrafos
-                                st.markdown("---")  
-                            
-        except json.JSONDecodeError:
-            st.error("El archivo subido no es un JSON válido. Por favor, verifica el formato.")
+                    for analysis_idx, analysis in enumerate(transformed_json["analysis"]):
+                        # Mostrar información clave encima del expander
+                        generation = analysis.get("generation", {})
+                        info = " | ".join(
+                            f"**{key.replace('_', ' ').capitalize()}**: {value.strip()}"
+                            for key, value in generation.items()
+                        )
+                        st.markdown(info)
 
-    
+                        # Crear expander para detalles específicos de la categoría
+                        with st.expander("View details"):
+                            if "evidence" in analysis:
+                                st.markdown("### Evidence and References")
+                                for paragraph_idx, evidence in enumerate(analysis["evidence"]):
+                                    pdf_reference = evidence.get("pdf_reference", "Not available")
+
+                                    # Inicializar estado de votos para cada párrafo
+                                    key_upvote, key_downvote = initialize_votes_state(analysis_idx, paragraph_idx, voter_name)
+
+                                    st.markdown(f"#### Paragraph {paragraph_idx + 1}")
+                                    st.markdown(f"- **PDF reference:** {pdf_reference}")
+
+                                    # Botones de votación
+                                    col1, col2 = st.columns(2)
+                                    with col1:
+                                        if st.button("Positive", key=f"{voter_name}_button_up_{analysis_idx}_{paragraph_idx}"):
+                                            st.session_state[key_upvote] = True  # Marcar como "Positive"
+                                            st.session_state[key_downvote] = False  # Desmarcar "Negative"
+                                    with col2:
+                                        if st.button("Negative", key=f"{voter_name}_button_down_{analysis_idx}_{paragraph_idx}"):
+                                            st.session_state[key_downvote] = True  # Marcar como "Negative"
+                                            st.session_state[key_upvote] = False  # Desmarcar "Positive"
+
+                                    # Mostrar el estado actual del voto
+                                    if st.session_state[key_upvote]:
+                                        st.markdown("✅ You voted **Positive** for this paragraph.")
+                                    elif st.session_state[key_downvote]:
+                                        st.markdown("❌ You voted **Negative** for this paragraph.")
+                                    else:
+                                        st.markdown("No vote recorded yet.")
+
+                                    st.markdown("---")
+
+                                    # Guardar los datos de votos
+                                    votes_data.append({
+                                        "Voter": voter_name,
+                                        "Category": analysis.get("question_category", "Unknown"),
+                                        "Paragraph": paragraph_idx + 1,
+                                        "PDF reference": pdf_reference,
+                                        "Positive Vote": st.session_state[key_upvote],
+                                        "Negative Vote": st.session_state[key_downvote]
+                                    })
+
+                    # Botón para descargar el archivo CSV
+                    st.markdown("### Download Your Votes")
+                    if votes_data:
+                        df = pd.DataFrame(votes_data)
+                        csv = df.to_csv(index=False)
+                        st.download_button(
+                            label="Download CSV",
+                            data=csv,
+                            file_name=f"{voter_name}_votes.csv",
+                            mime="text/csv"
+                        )
+            else:
+                st.warning("Please enter your name to enable voting.")
+        except Exception as e:
+            st.error(f"Error loading JSON file: {e}")
+
+
+            
     # Agregar espacio antes del pie de página
     st.markdown("<div style='height: 50px;'></div>", unsafe_allow_html=True)    
 
@@ -128,6 +157,7 @@ def json_page():
     col1, col2, col3, col4 = st.columns([4, 2, 2, 2])
     with col2:
         st.image("/Users/alexandrafaje/Desktop/Solar/solar_chem/logo_uni.png", width=150)
+        
 
 # Cargamos el JSON automaticamente
 def load_json_automatically(json_path):
@@ -137,7 +167,7 @@ def load_json_automatically(json_path):
         #st.write("Archivo JSON cargado automáticamente.")
         return query_data
     else:
-        st.error(f"El archivo JSON no se encontró en la ruta: {json_path}")
+        st.error(f"JSON file not found in path: {json_path}")
         return None
 
 # Pagina principal
@@ -161,8 +191,11 @@ def main_page():
     query_data = load_json_automatically(json_path)
 
     # Cargar el archivo PDF
-    uploaded_pdf = st.file_uploader("Sube tu archivo PDF", type="pdf")
+    uploaded_pdf = st.file_uploader("Upload your PDF file", type=["pdf", "json"])
+    print(uploaded_pdf)
     
+    doi = st.text_input('DOI (Optional):')
+
     # Verificar si se ha subido un archivo y si se ha presionado el botón Submit
     if uploaded_pdf is not None and st.button("Submit"):
         with st.spinner('Analyzing your paper... Please be patient'):
@@ -170,11 +203,12 @@ def main_page():
                 # Crear un diccionario de argumentos
                 args_dict = {
                     "use_platform": "True",
-                    "user_key": "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",
+                    #"user_key": "",
                     "llm_id": "llama3-groq-8b-8192-tool-use-preview",
-                    "hf_key": "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",
+                    #"hf_key": "",
                     "llm_platform": "groq",
                     "sim_model_id": "Salesforce/SFR-Embedding-Mistral",
+                    #"sim_model_id": "nomic-ai/nomic-embed-text-v1.5",
                     "input_file_path": uploaded_pdf.name,
                     "prompt_file_pdf": json_path,
                     "context_file_path": "context_result.json"
@@ -182,42 +216,49 @@ def main_page():
                 
                 # Enviar solicitud al backend
                 response = requests.post("http://127.0.0.1:8000/analysis/", json=args_dict)
+                temp = response.json()
+                #print(temp)
+                #with open("temp.json", "wb") as f:
+                #    json.dumps(temp)
                 
                 # Verificar si la respuesta fue exitosa
                 if response.status_code == 200:
+                    #generation_model = response.json()["generation_model"]
                     result = response.json()["result"]
                     context = response.json()["context"]
-                    
-                    st.write("Respuesta completa del backend:", context)
+                    context["DOI"] = doi
+                    generation_model = context["generation_model"]
+                    #print(response.json())
+                    #st.write("Backend response:", context)
 
                     # Mostrar Resultados Principales
                     if result:
-                        st.subheader("Análisis - Resultados Principales")
-                        st.write("Catalyst: " + str(result.get("catalyst", "No disponible")))
-                        st.write("Co_catalyst: " + str(result.get("co_catalyst", "No disponible")))
-                        st.write("Light_source: " + str(result.get("Light_source", "No disponible")))
-                        st.write("Lamp: " + str(result.get("Lamp", "No disponible")))
-                        st.write("Reaction_medium: " + str(result.get("Reaction_medium", "No disponible")))
-                        st.write("Reactor_type: " + str(result.get("Reactor_type", "No disponible")))
-                        st.write("Operation_mode: " + str(result.get("Operation_mode", "No disponible")))
+                        st.subheader("Analysis - Main results")
+                        st.write("Catalyst: " + str(result.get("catalyst", "Not available")))
+                        st.write("Co_catalyst: " + str(result.get("co_catalyst", "Not available")))
+                        st.write("Light_source: " + str(result.get("Light_source", "Not available")))
+                        st.write("Lamp: " + str(result.get("Lamp", "Not available")))
+                        st.write("Reaction_medium: " + str(result.get("Reaction_medium", "Not available")))
+                        st.write("Reactor_type: " + str(result.get("Reactor_type", "Not available")))
+                        st.write("Operation_mode: " + str(result.get("Operation_mode", "Not available")))
 
                         # Mostrar el modelo utilizado
-                        #generation_model = response.json().get("generation_model", "No disponible")
-                        #st.markdown(f"**Modelo utilizado:** {generation_model}")
+                        #generation_model = response.json().get("generation_model", "Not available")
+                        st.markdown(f"**Model used:** {generation_model}")
 
                     # Mostrar Evidencias Detalladas con el formato específico
-                    st.subheader("Evidencias Detalladas")
+                    st.subheader("Detailed evidence")
                     
                     evidencias = context.get("result", [])  # Lista de evidencias
                     
                     titulos = [
-                        "Catalyst: Tipo " + str(result.get("catalyst", "No disponible")) + 
-                        " | Co_catalyst: Tipo " + str(result.get("co_catalyst", "No disponible")),
-                        "Light_source: Tipo " + str(result.get("Light_source", "No disponible")) + 
-                        " | Lamp: Tipo " + str(result.get("Lamp", "No disponible")),
-                        "Reaction_medium: Tipo " + str(result.get("Reaction_medium", "No disponible")),
-                        "Reactor_type: Tipo " + str(result.get("Reactor_type", "No disponible")),
-                        "Operation_mode: Tipo " + str(result.get("Operation_mode", "No disponible"))
+                        "Catalyst: Type " + str(result.get("catalyst", "Not available")) + 
+                        " | Co_catalyst: Type " + str(result.get("co_catalyst", "Not available")),
+                        "Light_source: Type " + str(result.get("Light_source", "Not available")) + 
+                        " | Lamp: Type " + str(result.get("Lamp", "Not available")),
+                        "Reaction_medium: Type " + str(result.get("Reaction_medium", "Not available")),
+                        "Reactor_type: Type " + str(result.get("Reactor_type", "Not available")),
+                        "Operation_mode: Type " + str(result.get("Operation_mode", "Not available"))
                     ]
 
                     for idx, evidence_entry in enumerate(evidencias):
@@ -228,18 +269,32 @@ def main_page():
                         
                         with st.expander(expander_title):
                             for e_idx, detalle in enumerate(evidence_entry.get("evidence", [])):
-                                pdf_reference = detalle.get("pdf_reference", "No disponible")
+                                pdf_reference = detalle.get("pdf_reference", "Not available")
                                 #similarity_score = detalle.get("similarity_score", "No disponible")
                                 
-                                st.markdown(f"**Párrafo {e_idx + 1}**")
+                                st.markdown(f"**Paragraph {e_idx + 1}**")
                                 #st.markdown(f"- **Puntuación de Similitud:** `{similarity_score}`")
-                                st.markdown(f"- **Referencia del PDF:** {pdf_reference}")
+                                st.markdown(f"- **PDF reference:** {pdf_reference}")
                                 st.markdown("---")
                 else:
-                    st.error("Error al procesar el PDF.")
-                    st.write("Respuesta del servidor:", response.text)
+                    st.error("Error processing PDF.")
+                    st.write("Server response:", response.text)
+
+
+   
+                #json_string = json.dumps(temp)
+                json_string = json.dumps(context)
+                #st.json(json_string, expanded=True)
+                st.download_button(
+                    label = "Download: result.json",
+                    data = json_string,
+                    file_name = "result.json",
+                    mime = "application/json"
+                    )
+                    
+                    
             except Exception as e:
-                st.error(f"Error al conectar con el backend: {e}")
+                st.error(f"Error connecting to backend: {e}")
 
     # Agregar espacio antes del pie de página
     st.markdown("<div style='height: 50px;'></div>", unsafe_allow_html=True)
