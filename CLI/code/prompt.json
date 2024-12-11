@@ -1,0 +1,9 @@
+{
+    "catalyst": "What is the chemical name of the catalyst used in the experiment?",
+    "co_catalyst": "What is the chemical name of the co_catalyst used in the experiment?",
+    "Light_source": "From the choices provided, which light source is used in the experiment?",
+    "Lamp": "From the choices provided, which lamp is used in the experiment?",
+    "Reaction_medium": "From the choices provided, which reaction medium is used in the experiment?", 
+    "Reactor_type": "From the choices provided, which reactor type is used in the experiment?", 
+    "Operation_mode": "From the choices provided, which oepration mode is used in the experiment?"
+}

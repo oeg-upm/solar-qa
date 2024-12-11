@@ -1,51 +1,42 @@
-# Solar-QA-CLI
-This repository contains the command-line tool for [solar-qa pipepine](https://github.com/oeg-upm/solar-qa-eval)
+# SolarRAG CLI
 
-## Requirement
+> **_Solar CLI:_**  This CLI contains SolarFactRAG and SolarNaiveRAG pipeline for [solar-qa pipeline](https://github.com/oeg-upm/solar-qa-eval)
 
-### Requirement for Paper Extraction
+## Install
 
-- gorbid-client-python
+#### 1. install all python packages
 
-### Requirement for Generation
-
-- torch
-- accelerate
-- tokenizers
-- bitsandbytes
-- huggingface_hub
-- sentence-transformer
-- faiss-cpu
-- langchain
-- langchain_groq
-- langchain-community
-
-
-
-### Usage
-
-1. Install [GROBID](https://grobid.readthedocs.io/en/latest/) in your computing device
-2. Start running GROBID server in your local device by 
 ```console
-./gradlew run
+pip install ollama networkx leidenalg cdlib python-igraph python-dotenv langchain huggingface_hub langchain-ollama==0.1.0 langchain-community==0.2.19 sentence-transformers==2.7.0 grobid-client-python==0.0.3
 ```
-3. With the running GROBID server, to run the entire command-line tool by running the `cli.py` in the directory `.../CLI/code/cli.py`. The command line to run the `cli.py` is given below:
-```json
-"--use_platform": the parameter of whether use online platform or local model for the llm(generation model). option = ["True", "False"]
-"--user_key": the user key or token for the online platform, type="str"
-"--llm_id": the reference id for the llm(generation model), type="str"
-"--hf_key": your huggingface token, this is required to use the similarity model, type="str"
-"--llm_platform": indication of which llm online platform you wish to use, option=["grob"]
-"--sim_model_id": the reference id for the similarity model, type="str"
-"--input_file_path": the directory for the pdf fild that you wish to analysis, type="str", file type=.pdf
-"--prompt_file_path": the directory for the json file that contains your prompt, file type=.json
-"--context_file_path": the directory for where you wish to save the output file, file type=.json
-```
-*Example not use online platform:*
+
+#### 2. install ollama
+
+more details about ollama please visit the [offical ollama website](https://ollama.com/)
+
 ```console
-python cli.py --use_platform False --hf_key YOUR_HF_KEY --llm_id meta-llama/Llama-3.2-3B-Instruct --sim_model_id Salesforce/SFR-Embedding-Mistral --pdf_file_path .../test.pdf --prompt_file .../prompts.json --context_file_path .../context.json
+curl -fsSL https://ollama.com/install.sh | sh
 ```
-*Example use online platform:*
+
+#### 3. install grobid client
+
+please reference this part to the [offical grobid github page](https://grobid.readthedocs.io/en/latest/Install-Grobid/)
+
+## Run Solar CLI
+
+After installed all prerequisite libraries and software, you can simply run the cli by:
+
 ```console
-python cli.py --use_platform True --user_key YOUR_USER_KEY --hf_key YOUR_HF_KEY --llm_id llama-3.1-70b-versatile --llm_platform grob --sim_model_id Salesforce/SFR-Embedding-Mistral --pdf_file_path .../test.pdf --prompt_file .../prompts.json --context_file_path .../context.json
+python SolarRAG.py --llm_id llama3.2:3b --embedding_id nomic-embed-text --input_file_path XXX/paper_2.pdf --prompt_file XXX/prompt.json --context_file_path XXX/test.json --rag_type fact
 ```
+
+Here is a table that describe the parameters to run the FactRAG cli
+
+| Parameter | Definition | DataType | Example |
+| -------- | ------- | ------- | ------- |
+| llm_id  | the parameter of which LLM model from ollama to use | String | [llama3.2:3b](https://ollama.com/library/llama3.2) |
+| embedding_id | the parameter of which embedding model from ollama to use | String | [nomic-embed-text](https://ollama.com/library/nomic-embed-text) |
+| input_file_path | path for input data, pdf file or extracted json file | String | ../paper_1.pdf |
+| prompt_file | path for the prompt json file | String | ../code/prompt.json |
+| context_file_path | path for save the output json file | String | ../FactRAG/context.json |
+| rag_type | the type of rag pipeline, range=['fact', 'naive'] | String | fact |

@@ -1,87 +1,78 @@
-## CLI Result Specification
+# SolarRAG-CLI Result Specification
 
-### Generation Model
-This item contains the large lanugage model (llm) reference id. 
+## Result Specification Table
 
-*Example:*
+Here is the table that describe the saved output json file:
 
-```json
-"generation_model": "meta-llama/Llama-3.2-3B-Instruct"
-```
+| Category | Definition | DataType | Example |
+| -------- | ------- | ------- | ------- |
+| paper_title  | The title of the paper | String | Effect of silver doping on the TiO2 for photocatalytic reduction of CO2 |
+| DOI | The DOI of the paper(extracted from the paper pdf file) | String | 10.1016/j.apcatb.2010.02.030 |
+| generation_model | The ollama model id for llm generation | String | llama3.2:3b |
+| similarity_model | The ollama model id for text embedding | String | nomic-embed-text |
+| similarity_metric | The metric for calculating the similarity between embeddings  | String | Cosine_Similarity |
+| rag_type | the type of rag pipeline, range=['fact', 'naive'] | String | fact |
+| result | The list of generation result from the llm  | List | Details given velow |
 
+The details for `result` part of the saved output json file:
 
-### Similarity Model
-This item contains the similarity model reference id (the model is used in RAG searching stage).
+| Category | Definition | DataType | Example | Range(if applicable) |
+| -------- | ------- | ------- | ------- | ------- |
+| question_category  | The category of the question for the llm | String | Light_source | [catalyst, co_catalyst, Light_source, Lamp, Reaction_medium, Reactor_type, Operation_mode] |
+| query | The query for the llm | String | What is the Light_source used in the experiment? | Not applicable |
+| generation | The generated answer from the llm | String | ###Light_source: UV | Not applicable |
+| RAG_source | The information source provided for the RAG pipeline | String | generated_facts | Not applicable |
+| selected_answer | The corresponding answer from the selection of choices | String | UV | Details are given below |
+| evidences | The list of evidences for the RAG pipeline  | list | Details given below | Not applicable |
 
-*Example:*
+The range for `selected_answer` with correspongind `question_category`:
+| question_category | Range(if applicable) |
+| -------- | ------- |
+| catalyst | Not applicable |
+| co_catalyst | Not applicable |
+| Light_source | 'UV', 'Solar', 'UV-Vis', 'Monochromatic', 'Solar Simulator', 'Do not Know' |
+| Lamp | 'Fluorescent', 'Mercury', 'Halogen', 'Mercury-Xenon', 'LED', 'Tungsten', 'Xenon', 'Tungsten-Halide', 'Solar Simulator', 'Do not Know' |
+| Reaction_medium | 'Liquid', 'Gas', 'Do not Know' |
+| Reactor_type | 'Slurry', 'Fixed-bed', 'Optical Fiber', 'Monolithic', 'Membrane', 'Fluidised-bed', 'Do not Know' |
+| Operation_mode | 'Batch', 'Continuous', 'Batch/Continuous', 'Do not Know' |
 
-```json
-"similarity_model": "Salesforce/SFR-Embedding-Mistral"
-```
+The details for `evidence` part of the `result` from the output json:
 
+| Category | Definition | DataType | Example |
+| -------- | ------- | ------- | ------- |
+| similairty_score  | The similairty score between the query and correspond text provided to the embedding model | Float | 0.6205 |
+| pdf_reference | The original text that are extracted from the paper | String | in the conventional focusing... |
+| generated_fact | The generated facts based on the pdf_reference | String | Facts: 1. A homemade apparatus is used... |
 
-### Similarity Metric
-This item contains the calculation metric used in the RAG searching stage
+> **_NOTE:_**  `generated_fact` only existed when the type of RAG pipeline is `fact` RAG.
 
-*Example:*
-
-```json
-"similarity_metric": "Cosine_Similarity"
-```
-
-
-### Result
-This item contains all relevant generation results, which includes:
-
-| Property | Mandatory? | Expected Value | Definition |
-| :----- | :---- | :---- | :---- |
-| **question_category** | Yes | String   | This item refers to what the query is about, five possible choices are given below |
-| **query** | Yes | String | This item contains the prompt used for the llm generation |
-| **generation** | Yes | Dictionary | This item contains the generation result from the llm model, formatted as question_category: answer in a dictionary, as given in the table below  |
-| **evidence** | Yes | Dictionary | This item contains the evidence to support the RAG algorithm, which contains **pdf_refercence** and **similiarity_score** |
-| **pdf_reference** | Yes | String | This item contains the original text extracted by the similarity model |
-| **similiarity_score** | Yes | Float | This item contains the similarity score that are calcuated between quesry embedding and pdf_reference embedding, the calculation metric is the similarity metric. |
-
-*generation format:*
-
-Generation contains the result from llm's generation, the result only have one category of the item/items, with the corresponding expected value/values.
-The choices for **individual category** and **expected value** are given below.
-
-```json
-"generation":{
-    "individual category": "excepted value",
-    ...
-}
-```
-
-*Choices for question_category and expected value, as the choices for generation:*
-
-| Category | Expected Value |Definition |
-| :----- | :---- | :---- |
-| **catalyst/co_catalyst** | The catalyst and co_catalyst used in the experiment |The query is about the catalyst condition  | 
-| **light_source/lamp** | **light_source**: 'UV', 'Solar', 'UV-Vis', 'Monochromatic', 'Solar Simulator'<br>**lamp**: 'Fluorescent', 'Mercury', 'Halogen', 'Mercury-Xenon', 'LED', 'Tungsten', 'Xenon', 'Tungsten-Halide', 'Solar Simulator' | The query is about the light usage condition about the experiment | 
-| **reaction_medium** | 'Liquid', 'Gas' | The query is about the reaction medium used in the experiment | 
-| **reactor_type** | The query is about the type of the reactor used in the experiment | 'Slurry', 'Fixed-bed', 'Optical Fiber', 'Monolithic', 'Membrane', 'Fluidised-bed' | 
-| **operation_mode** | 'Batch', 'Continuous', 'Batch/Continuous' | The query is about how the operation is conducted | 
-
-
+## Example of the SolarRAG-CLI result
 
 *Example:*
 ```json
-"question_category": "catalyst/co_catalyst",
-"query": "\nPlease find the name of the catalyst...",
-"generation": {
-    "catalyst": "TiO2",
-    "co_catalyst": "Cu"
-}
-"evidence": [
-    {
-        "pdf_reference": "of TiO 2 photocatalyst.The in situ IR experiments are still in progress to investigate the mechanism aspects of the catalyst.",
-        "similarity_score": 0.4707722067832947
-    },
-    {
-        "pdf_reference": "other hydrocarbons might have been generated, but in small quantities which is too low to be detected.Photocatalytic activity is presented by a product yield, e.g., lmol/(g catal.), and quantum efficiency (U Q ) that can be evaluated with Eq. ( 1) below 1.This calculation is based on methanol yield at 6 h of the reaction. The results of quantum efficiency calculation are displayed in Table 2.The formation of methanol was found to be much more effective on Cu 2 loaded TiO 2 catalyst.The highest methanol",
-        "similarity_score": 0.49091827869415283
-    },
-    ...
-]
+    "paper_title": "Effect of silver doping on the TiO2 for photocatalytic reduction of CO2",
+    "DOI": "10.1016/j.apcatb.2010.02.030",
+    "generation_model": "llama3.2:3b",
+    "similarity_model": "nomic-embed-text",
+    "similarity_metric": "Cosine_Similarity",
+    "rag_type": "fact",
+    "result": [
+        {
+            "question_category": "catalyst",
+            "query": "What is the chemical name of the catalyst used in the experiment",
+            "generation": "###catalyst: Titanium dioxide (TiO2)",
+            "RAG_source": "generated_facts",
+            "selected_answer": {
+                "catalyst": " Titanium dioxide (TiO2)"
+            },
+            "evidences": [
+                {
+                    "similairty_score": 0.6646425724029541,
+                    "pdf_reference": "methods were described in our previous publication 39.It is important to minimize the influence of transport phenomena during kinetic measurements.The elimination of CO 2 diffusion from the bulk of gas through the gas-liquid interface in a laboratory batch slurry reactor was accomplished by saturating the liquid with pure CO 2 before the reaction had been started 4,11.Catalyst loading of 1 g dm -3 was chosen to avoid concentration gradients in the bulk of stirred liquid with TiO 2 suspension due to the scattering effect of light caused by the high TiO 2 concentration 11,16,40,41.The",
+                    "generated_facts": "Facts:\n1. The methods described in publication 39 were used for kinetic measurements.\n2. Kinetic measurements should minimize influence.\n3. CO2 diffusion from the bulk of gas through the gas-liquid interface was accomplished by saturating the liquid with pure CO2.\n4. Saturating the liquid with pure CO2 resulted in a high concentration of TiO2 suspension due to scattering effects of light.\n5. The scattering effect of light caused concentration gradients in the reactor.\n6. Concentration gradients in the reactor were avoided by choosing an optimal catalyst loading.\n7. An optimal catalyst loading was used to eliminate CO2 diffusion from the bulk of gas.\n8. Eliminating CO2 diffusion from the bulk of gas resulted in a laboratory batch slurry reactor being used for reaction.\n9. A laboratory batch slurry reactor was used to accomplish elimination of CO2 diffusion.\n10. The elimination of CO2 diffusion was achieved by using a TiO2 suspension that scattered light."
+                },
+                ...
+            ]
+        }
+    ]
+```
