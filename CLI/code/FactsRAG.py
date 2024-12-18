@@ -52,18 +52,26 @@ def get_doi(data):
 def clean_response(gen, category):
     print(gen)
     res = {}
-    s, e = gen.split(":")
-    res[category] = e
+    if ":" in gen:
+        temp = gen.split(":")
+        if len(temp) == 2:
+            s, e = temp[0], temp[1]
+            res[category] = e
+        else:
+            res[category] = gen
+    else:
+        res[category] = gen
     print(res)
     return res
 
 
 class SolarFact:
-    def __init__(self, llm_id, embedding_id, input_file_path=str(), context_file_path=str()):
+    def __init__(self, llm_id, embedding_id, input_file_path=str(), context_file_path=str(), rag_type = str()):
         self.llm_id = llm_id
         self.embedding_id = embedding_id
         self.input_file_path = input_file_path
         self.context_file_path = context_file_path
+        self.rag_type = rag_type
         self._get_llm()
         self._get_documents()
         self.context_result = {
@@ -74,7 +82,11 @@ class SolarFact:
             "similarity_metric": "Cosine_Similarity",
             "result": []
         }
-        self.chunks, self.entities, self.relations, self.facts = self._prepare_pipeline()
+        if rag_type == 'fact':
+            self.chunks, self.entities, self.relations, self.facts = self._prepare_pipeline()
+        else:
+            self.chunks = self._navie_prepare_pipeline()
+            
     
     def _get_llm(self):
         self.llm = ChatOllama(model=self.llm_id, temperature=0)
@@ -91,7 +103,7 @@ class SolarFact:
         self.doi = get_doi(data)
         self.documents = get_text(data)
     
-    def _split_documents_into_chunks(self, chunk_size=600, overlap_size=100):
+    def _split_documents_into_chunks(self, chunk_size=1200, overlap_size=100):
         documents = [Document(page_content=self.documents)]
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=overlap_size)
         chunks = text_splitter.split_documents(documents)
@@ -186,6 +198,9 @@ class SolarFact:
                 )
         return indexes, final_response.content
     
+    def _navie_prepare_pipeline(self):
+        return self._split_documents_into_chunks()
+    
     def _prepare_pipeline(self):
         chunks = self._split_documents_into_chunks()
         
@@ -199,7 +214,7 @@ class SolarFact:
         
     
     def graphrag_pipeline(self, k, prompt, category):
-        print("---------------------running factrag pipeline---------------------")
+        print("---------------------running SolarRAG pipeline---------------------")
         ## Prepare data
         #self.chunks, self.entities, self.relations, self.facts
         
@@ -216,29 +231,55 @@ class SolarFact:
             selection = "'Slurry', 'Fixed-bed', 'Optical Fiber', 'Monolithic', 'Membrane', 'Fluidised-bed', 'Do not Know'"
         elif category == 'Operation_mode':
             selection = "'Batch', 'Continuous', 'Batch/Continuous', 'Do not Know'"
-            
+        
+        if self.rag_type == 'fact':
         ## Run Pipeline
-        sim_dict = self._cal_fact_cosine_similairty(self.facts, prompt, category)
-        
-        indexes, final_response = self._generate_final_answer(sim_dict, k, self.facts, prompt, category, selection)
-        
-        evidences = []
-        
-        for index in indexes:
-            evidence = {
-                "similairty_score": sim_dict[index],
-                "pdf_reference": self.chunks[index].page_content,
-                "generated_facts": self.facts[index]
-            }
-            evidences.append(evidence)
-        temp = {
-                "question_category": category,
-                "query": prompt,
-                "generation": final_response,
-                "RAG_source": "generated_facts",
-                "selected_answer": clean_response(final_response, category),
-                "evidences": evidences
-            }
+            sim_dict = self._cal_fact_cosine_similairty(self.facts, prompt, category)
+
+            indexes, final_response = self._generate_final_answer(sim_dict, k, self.facts, prompt, category, selection)
+
+            evidences = []
+
+            for index in indexes:
+                evidence = {
+                    "similarity_score": sim_dict[index],
+                    "pdf_reference": self.chunks[index].page_content,
+                    "generated_facts": self.facts[index]
+                }
+                evidences.append(evidence)
+            temp = {
+                    "question_category": category,
+                    "query": prompt,
+                    "generation": final_response,
+                    "RAG_source": "generated_facts",
+                    "selected_answer": clean_response(final_response, category),
+                    "evidences": evidences
+                }
+        else:
+            chunks = {}
+            for index, chunk in enumerate(self.chunks):
+                chunks[index] = chunk.page_content
+            
+            sim_dict = self._cal_fact_cosine_similairty(chunks, prompt, category)
+            
+            indexes, final_response = self._generate_final_answer(sim_dict, k, chunks, prompt, category, selection)
+            
+            evidences = []
+            
+            for index in indexes:
+                evidence = {
+                    "similarity_score": sim_dict[index],
+                    "pdf_reference": chunks[index],
+                }
+                evidences.append(evidence)
+            temp = {
+                    "question_category": category,
+                    "query": prompt,
+                    "generation": final_response,
+                    "RAG_source": "chunks",
+                    "selected_answer": clean_response(final_response, category),
+                    "evidences": evidences
+                }
         return temp
         
 
@@ -249,6 +290,7 @@ def get_parser():
     parser.add_argument('--input_file_path', type=str, default=True, help="path for input data, pdf file or extracted json file")
     parser.add_argument('--prompt_file', help='queries', type=str)
     parser.add_argument('--context_file_path', type=str, default=True, help="save context file")
+    parser.add_argument('--rag_type', type=str, default=True, help="factRag or naiveRag")
     return parser
 
 
@@ -265,6 +307,7 @@ def main():
             "generation_model": factrag.llm_id,
             "similarity_model": factrag.embedding_id,
             "similarity_metric": "Cosine_Similarity",
+            "rag_type": factrag.rag_type,
             "result": []
     }
     with open(prompt_file, "rb") as f:
